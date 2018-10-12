@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    
+    <h:head>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+      <!--Import materialize.css-->
+      <!-- Compiled and minified CSS -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"/>
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    
+    <h:body>
+    <style type="text/css">
+            .ui-widget-header {
+                background: #00BFA5;
+                color: white;
+            }
+            .ui-state-highlight, .ui-widget-content .ui-state-highlight{
+                background: #b2dfdb;
+                color:black;
+            }              
+            .ui-widget {
+                font-family: "Roboto";
+                font-size: 1.1em;
+            }
+            .ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td, .ui-datatable tfoot th {
+                overflow: visible;
+            }
+            .ui-button{
+                background: #00BFA5;
+                color: white;
+            }
+            .ui-radiobutton-icon {
+                margin-left: 0px;
+            }
+        </style>
+      
+        <nav>
+            <div class="nav-wrapper teal accent-4 z-depth-1">
+                <p:link outcome="index" class="brand-logo center"><img src="resources/images/logo.png"/></p:link>
+                <ul id="nav" class="left hide-on-med-and-down">
+                    <li><p:link outcome="index" value="Générer une feuille de match"></p:link></li>
+                </ul>
+                <ul id="nav" class="right hide-on-med-and-down">
+                    <li><p:link outcome="feuilles-de-match" value="Mes feuilles de match"></p:link></li>
+                </ul>
+            </div>
+        </nav>
+        <br/>
+        
+        <h:form>
+        <div id="panel_fiches" class="card-panel col s12 z-depth-4">
+                    <div class="row">
+                    <div class="col s12">
+                        <p:messages globalOnly="true"/>
+                        <p:dataTable id="feuillesMatch" value="#{feuilleMatchController.feuillesMatch}" var="fm" rowKey="#{fm.idFeuilleMatch}" 
+                                     selectionMode="single" selection="#{feuilleMatchController.feuilleMatchSelect}">
+                            <f:facet name="header">
+                                Feuilles de Match
+                            </f:facet>
+                            <p:column headerText="Domicile">
+                                <h:outputText value="#{fm.equipeDomicile.nom}" />
+                            </p:column>
+                            <p:column headerText="Extérieur">
+                                <h:outputText value="#{fm.equipeExterieur.nom}" />
+                            </p:column>
+                            <p:column headerText="Date">
+                                <h:outputText value="#{fm.dateMatch}">
+                                    <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Horaire">
+                                <h:outputText value="#{fm.horaireMatch}"> 
+                                    <f:convertDateTime pattern="HH:mm" timeZone="GMT+1"/>
+                                </h:outputText>
+                            </p:column>  
+                            <p:column headerText="Stade">
+                                <h:outputText value="#{fm.stade}"/> 
+                            </p:column>
+                            <p:column headerText="Arbitre">
+                                <h:outputText value="#{fm.arbitre}"/> 
+                            </p:column>
+                            <p:column style="width:68px;">
+                                <a href="resources/pdf/fm#{fm.toString()}.pdf">
+                                    <h:graphicImage library="images" name="pdf-2.png" />
+                                </a>
+                            </p:column>
+                            <f:facet name="footer">
+                                <div align="right" >    
+                                    <p:commandButton id="boutonSuppr" action="#{feuilleMatchController.suppFeuilleMatch()}" 
+                                         icon="ui-icon-close" ajax="false"/>
+                                </div>
+                            </f:facet>
+                        </p:dataTable>
+                    </div> 
+                </div>
+        </div>
+        </h:form>
+        
+
+        <!--Import jQuery before materialize.js-->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+        
+    </h:body>
+</html>

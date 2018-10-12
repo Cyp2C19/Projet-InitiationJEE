@@ -1,0 +1,245 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    
+    <h:head>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+      <!--Import materialize.css-->
+      <!-- Compiled and minified CSS -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"/>
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    
+    <h:body>
+    <style type="text/css">
+            .ui-widget-header {
+                background: #e8f5e9;
+                color: white;
+            }
+            .ui-state-highlight, .ui-widget-content .ui-state-highlight{
+                background: #b2dfdb;
+                color:black;
+            }              
+            .ui-widget {
+                font-family: "Roboto";
+                font-size: 1.1em;
+            }
+            .ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td, .ui-datatable tfoot th {
+                overflow: visible;
+            }
+            .ui-button{
+                background: #00BFA5;
+                color: white;
+            }
+            .ui-radiobutton-icon {
+                margin-left: 0px;
+            }
+            
+            .ui-messages-info-summary{
+                color:red;
+            }
+        </style>
+      
+        <nav>
+            <div class="nav-wrapper teal accent-4 z-depth-1">
+                <p:link outcome="index" class="brand-logo center"><img src="resources/images/logo.png"/></p:link>
+                <ul id="nav" class="left hide-on-med-and-down">
+                    <li><p:link outcome="index" value="Générer une feuille de match"></p:link></li>
+                </ul>
+                <ul id="nav" class="right hide-on-med-and-down">
+                    <li><p:link outcome="feuilles-de-match" value="Mes feuilles de match"></p:link></li>
+                </ul>
+            </div>
+        </nav>
+        <br/>
+        
+        <div class="row">
+            <ul id="tabs-swipe-demo" class="tabs">
+                <li class="tab col s3 offset-s1"><a href="#infos" class="active" >
+                        <span class="teal-text text-accent-4">Informations match</span></a>
+                </li>
+                <li class="tab col s4"><a href="#selectionDom">
+                        <span class="teal-text text-accent-4">Sélection domicile</span></a>
+                </li>
+                <li class="tab col s3"><a href="#selectionExt">
+                        <span class="teal-text text-accent-4">Sélection extérieur</span></a>
+                </li>
+            </ul>
+        </div>
+        
+        <h:form id="form">
+            <div class ="container">
+                
+                <div id="infos" class="card-panel col s12 z-depth-4">
+                    <div class="row">
+                        <div class="col l4 s12">
+                            <h:outputLabel for="select_equipeDom" value="Équipe domicile" />
+                            <h:selectOneMenu id="select_equipeDom" value="#{feuilleMatchController.feuilleMatchSelect.equipeDomicile}" 
+                                             converter="equipeConverter">
+                                <f:selectItem itemLabel="Choix d'une équipe"/>
+                                <f:selectItems value="#{equipeController.equipes}" var="equipe" itemLabel="#{equipe.nom}" itemValue="#{equipe}" />
+                            <p:ajax event="change" update="domicileDT"/>
+                            </h:selectOneMenu>
+                            <br/><p:message for="select_equipeDom"/><br/>
+                        </div>
+                        <div class="col l4 s12">     
+                            <h:outputLabel for="select_stade" value="Stade"/>
+                            <h:selectOneMenu id="select_stade" value="#{feuilleMatchController.feuilleMatchSelect.stade}">
+                                <f:selectItem itemLabel="Choix d'un stade" itemValue=""/>
+                                <f:selectItem itemLabel="Parc des Princes" itemValue="Parc des Princes"/>
+                                <f:selectItem itemLabel="Stade Pierre Mauroy" itemValue="Stade Pierre Mauroy"/>
+                                <f:selectItem itemLabel="Stade Vélodrome" itemValue="Stade Vélodrome"/>
+                                <f:selectItem itemLabel="Stade de France" itemValue="Stade de France"/>
+                                <f:selectItem itemLabel="Groupama Stadium" itemValue="Groupama Stadium"/>
+                            </h:selectOneMenu>
+                            <br/><p:message for="select_stade"/><br/>
+                        </div>
+                        <div class="col l4 s12">     
+                            <h:outputLabel for="select_equipeExt" value="Équipe extérieur" />
+                            <h:selectOneMenu id="select_equipeExt" value="#{feuilleMatchController.feuilleMatchSelect.equipeExterieur}" 
+                                             converter="equipeConverter">
+                                <f:selectItem itemLabel="Choix d'une équipe"/>
+                                <f:selectItems value="#{equipeController.equipes}" var="equipe" itemLabel="#{equipe.nom}" itemValue="#{equipe}" />
+                            <p:ajax event="change" update="exterieurDT"/>
+                            </h:selectOneMenu>
+                            <br/><p:message for="select_equipeExt"/><br/>
+                        </div>
+                        <p:messages globalOnly="true"/>
+                    </div>
+                    <div class="row">
+                        <div class="col s4">
+                            <h:outputLabel for="select_arbitre" value="Arbitre" />
+                            <h:selectOneMenu id="select_arbitre" value="#{feuilleMatchController.feuilleMatchSelect.arbitre}">
+                                <f:selectItem itemLabel="Choix d'un arbitre" itemValue=""/>
+                                <f:selectItem itemLabel="Laurent Duhamel" itemValue="Laurent Duhamel"/>
+                                <f:selectItem itemLabel="Tony Chapron" itemValue="Tony Chapron"/>
+                            </h:selectOneMenu>
+                            <br/><p:message for="select_arbitre"/><br/>
+                        </div>
+                        <div class="col s4">
+                                <h:outputLabel for="input_horaire" value="Horaire" />
+                                <p:inputText id="input_horaire" placeholder="HH:MM"
+                                             value="#{feuilleMatchController.feuilleMatchSelect.horaireMatch}" maxlength="5">
+                                <f:convertDateTime timeZone="GMT+1" pattern="HH:mm"/>
+                                </p:inputText>
+                                <p:message for="input_horaire"/>
+                        </div>
+                        <div class="col s4">
+                                <h:outputLabel for="input_date" value="Date" />
+                                <p:inputText id="input_date" placeholder="JJ-MM-AAAA"
+                                             value="#{feuilleMatchController.feuilleMatchSelect.dateMatch}" maxlength="10">
+                                    <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                                </p:inputText>
+                                <br/><p:message for="input_date"/><br/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                <div class="container">
+                <div id="selectionDom" class="card-panel col s12 z-depth-4">
+                    <div class="row">
+                    <div class="col s12">
+                        <p:dataTable id="domicileDT" value="#{feuilleMatchController.feuilleMatchSelect.equipeDomicile.joueurCollection}" 
+                                     var="joueur" rowKey="#{joueur.numeroLicence}">
+                            <f:facet name="header">
+                                <c:if test="#{feuilleMatchController.feuilleMatchSelect.equipeDomicile ne null}">
+                                    <img src="resources/images/clubs/#{feuilleMatchController.feuilleMatchSelect.equipeDomicile.logo}" height="60px;" width="60px;"/>
+                                </c:if>
+                            </f:facet>
+                            <p:column style="width:80px;">
+                                <img src="resources/images/joueurs/#{joueur.photo}" height="85px;"/>
+                            </p:column>
+                            <p:column headerText="N°" style="width:70px;">
+                                <h:outputText value="#{joueur.numero}" />
+                            </p:column>
+                            <p:column headerText="Poste" style="width:80px;">
+                                <h:outputText value="#{joueur.poste}" />
+                            </p:column>
+                            <p:column headerText="Prénom - Nom" style="width:330px;">
+                                <h:outputText value="#{joueur.prenom} #{joueur.nom}" />
+                            </p:column>
+                            <p:column headerText="Age" style="width:65px;">
+                                <h:outputText value="#{joueur.age}" />
+                            </p:column>  
+                            <p:column headerText="Statut">
+                                <p:selectOneRadio id="select_statut_dom" value="#{joueur.statut}">
+                                    <f:selectItem itemLabel="Titulaire" itemValue="Titulaire"/>
+                                    <f:selectItem itemLabel="Remplaçant" itemValue="Remplaçant"/>
+                                    <f:selectItem itemLabel="Absent" itemValue="Absent"/>
+                                </p:selectOneRadio>
+                            </p:column>
+                        </p:dataTable>
+                    </div> 
+                    </div>
+                    </div>
+                </div>
+            
+                <div class="container">
+                <div id="selectionExt" class="card-panel col s12 z-depth-4">
+                    <div class="row">
+                        <div class="col s12">
+                        <p:dataTable id="exterieurDT" value="#{feuilleMatchController.feuilleMatchSelect.equipeExterieur.joueurCollection}" 
+                                     var="joueur" rowKey="#{joueur.numeroLicence}">
+                            <f:facet name="header">
+                                <c:if test="#{feuilleMatchController.feuilleMatchSelect.equipeDomicile ne null}">
+                                    <img src="resources/images/clubs/#{feuilleMatchController.feuilleMatchSelect.equipeExterieur.logo}" height="60px;" width="60px;"/>
+                                </c:if>
+                            </f:facet>
+                            <p:column style="width:80px;">
+                                <img src="resources/images/joueurs/#{joueur.photo}" height="85px;"/>
+                            </p:column>
+                            <p:column headerText="N°" style="width:70px;">
+                                <h:outputText value="#{joueur.numero}" />
+                            </p:column>
+                            <p:column headerText="Poste" style="width:80px;">
+                                <h:outputText value="#{joueur.poste}" />
+                            </p:column>
+                            <p:column headerText="Prénom - Nom" style="width:330px;">
+                                <h:outputText value="#{joueur.prenom} #{joueur.nom}" />
+                            </p:column>
+                            <p:column headerText="Age" style="width:65px;">
+                                <h:outputText value="#{joueur.age}" />
+                            </p:column>
+                            <p:column headerText="Statut">
+                                <p:selectOneRadio id="select_statut_dom" value="#{joueur.statut}">
+                                    <f:selectItem itemLabel="Titulaire" itemValue="Titulaire"/>
+                                    <f:selectItem itemLabel="Remplaçant" itemValue="Remplaçant"/>
+                                    <f:selectItem itemLabel="Absent" itemValue="Absent"/>
+                                </p:selectOneRadio>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12" align="center">
+                        <p:commandButton value="GÉNÉRER LA FEUILLE DE MATCH" action="#{feuilleMatchController.creerFeuilleMatch(feuilleMatchController.feuilleMatchSelect)}" icon="ui-icon-check" ajax="false"/>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </h:form>
+
+        <!--Import jQuery before materialize.js-->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+        
+        <script> 
+          $(document).ready(function() {
+              $('select').material_select();
+              $('ul.tabs').tabs();
+          });
+          function changePage(id){
+            $('ul.tabs').tabs('select_tab', id);         
+          }
+        </script>
+    </h:body>
+</html>
